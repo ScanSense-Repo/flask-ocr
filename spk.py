@@ -1,0 +1,119 @@
+import numpy as np
+
+def bobot(bidang):
+    if bidang == "IT":
+        return {
+            "pengalaman_kerja": 0.3,
+            "skill_sertifikat": 0.25,
+            "pengalaman_organisasi": 0.2,
+            "ipk": 0.1,
+            "umur": 0.05,
+            "lokasi_kerja": 0.1
+        }
+
+def averageValue(criterias):
+    avg = {
+        "pengalaman_kerja": 0,
+        "skill_sertifikat": 0,
+        "pengalaman_organisasi": 0,
+        "ipk": 0,
+        "umur": 0,
+        "lokasi_kerja": 0
+    }
+    for c in criterias:
+        avg["pengalaman_kerja"] += float(c["pengalaman_kerja"])
+        avg["skill_sertifikat"] += float(c["skill_sertifikat"])
+        avg["pengalaman_organisasi"] += float(c["pengalaman_organisasi"])
+        avg["ipk"] += float(c["ipk"])
+        avg["umur"] += float(c["umur"])
+        avg["lokasi_kerja"] += float(c["lokasi_kerja"])
+
+    avg["pengalaman_kerja"] /= len(criterias)
+    avg["skill_sertifikat"] /= len(criterias)
+    avg["pengalaman_organisasi"] /= len(criterias)
+    avg["ipk"] /= len(criterias)
+    avg["umur"] /= len(criterias)
+    avg["lokasi_kerja"] /= len(criterias)
+
+    return avg
+
+def pda(criterias, avg):
+    temp_criterias = criterias.copy()
+    for i, c in enumerate(criterias):
+        temp_criterias[i]["pengalaman_kerja"] = max(0, (float(c["pengalaman_kerja"]) - avg["pengalaman_kerja"]) / avg["pengalaman_kerja"])
+        temp_criterias[i]["skill_sertifikat"] = max(0, (float(c["skill_sertifikat"]) - avg["skill_sertifikat"]) / avg["skill_sertifikat"])
+        temp_criterias[i]["pengalaman_organisasi"] = max(0, (float(c["pengalaman_organisasi"]) - avg["pengalaman_organisasi"]) / avg["pengalaman_organisasi"])
+        temp_criterias[i]["ipk"] = max(0, (float(c["ipk"]) - avg["ipk"]) / avg["ipk"])
+        temp_criterias[i]["umur"] = max(0, (avg["umur"] - float(c["umur"])) / avg["umur"])
+        temp_criterias[i]["lokasi_kerja"] = max(0, (avg["lokasi_kerja"] - float(c["lokasi_kerja"])) / avg["lokasi_kerja"])
+    
+    return temp_criterias
+
+def nda(criterias, avg):
+    temp_criterias = criterias.copy()
+    for i, c in enumerate(criterias):
+        temp_criterias[i]["pengalaman_kerja"] = max(0, (avg["pengalaman_kerja"] - float(c["pengalaman_kerja"])) / avg["pengalaman_kerja"])
+        temp_criterias[i]["skill_sertifikat"] = max(0, (avg["skill_sertifikat"] - float(c["skill_sertifikat"])) / avg["skill_sertifikat"])
+        temp_criterias[i]["pengalaman_organisasi"] = max(0, (avg["pengalaman_organisasi"] - float(c["pengalaman_organisasi"])) / avg["pengalaman_organisasi"])
+        temp_criterias[i]["ipk"] = max(0, (avg["ipk"] - float(c["ipk"])) / avg["ipk"])
+        temp_criterias[i]["umur"] = max(0, (float(c["umur"]) - avg["umur"]) / avg["umur"])
+        temp_criterias[i]["lokasi_kerja"] = max(0, (float(c["lokasi_kerja"]) - avg["lokasi_kerja"]) / avg["lokasi_kerja"])
+    
+    return temp_criterias
+
+def sp(pda, bidang):
+    w = bobot(bidang)
+    result = []
+    for p in pda:
+        total = 0
+        total += p["pengalaman_kerja"] * w["pengalaman_kerja"]
+        total += p["skill_sertifikat"] * w["skill_sertifikat"]
+        total += p["pengalaman_organisasi"] * w["pengalaman_organisasi"]
+        total += p["ipk"] * w["ipk"]
+        total += p["umur"] * w["umur"]
+        total += p["lokasi_kerja"] * w["lokasi_kerja"]
+        result.append(total)
+    
+    return result
+
+def sn(nda, bidang):
+    w = bobot(bidang)
+    result = []
+    for n in nda:
+        total = 0
+        total += n["pengalaman_kerja"] * w["pengalaman_kerja"]
+        total += n["skill_sertifikat"] * w["skill_sertifikat"]
+        total += n["pengalaman_organisasi"] * w["pengalaman_organisasi"]
+        total += n["ipk"] * w["ipk"]
+        total += n["umur"] * w["umur"]
+        total += n["lokasi_kerja"] * w["lokasi_kerja"]
+        result.append(total)
+    
+    return result
+
+def nsp(sp):
+    max_sp = max(sp)
+    result = []
+    for s in sp:
+        result.append(s / max_sp)
+    
+    return result
+
+def nsn(sn):
+    max_sn = max(sn)
+    result = []
+    for s in sn:
+        result.append(s / max_sn)
+    
+    return result
+
+def ranking(nsp, nsn, alternative):
+    rank = {}
+    for i, np in enumerate(nsp):
+        data = 0.5 * (nsp[i] + nsn[i])
+        rank[alternative[i]] = data
+
+    sorted_data = dict(sorted(rank.items(), key=lambda item: item[1], reverse=True))
+
+
+    return sorted_data

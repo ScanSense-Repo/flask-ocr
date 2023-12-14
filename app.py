@@ -3,8 +3,16 @@ import cv2
 import numpy as np
 import logging
 from prediction import predict
+from firebase_admin import credentials, firestore, initialize_app
+from spk import averageValue, pda, nda, sp, sn, nsp, nsn, ranking
 
 app = Flask(__name__, template_folder='templates')
+
+# initialize firestore 
+cred = credentials.Certificate("./scan-sense-d7ad9-firebase-adminsdk-o1drh-6d4ddc5cc6.json")
+default_app = initialize_app(cred)
+db = firestore.client()
+user_ref = db.collection('test')
 
 @app.route('/')
 def index():
@@ -45,3 +53,53 @@ def upload_ktp():
         }
         
         return jsonify(response)
+
+@app.route('/users', methods=['GET'])
+def read():
+    """
+        read() : Fetches documents from Firestore collection as JSON
+        todo : Return document that matches query ID
+        all_todos : Return all documents
+    """
+    try:
+        # bidang 
+        bidang = request.args.get('bidang')
+        results = [doc.to_dict() for doc in user_ref.stream()]
+        criterias = []
+        alternative = []
+        for user in results :
+            data = user['kriteria']
+            data["name"] = user["name"]
+            criterias.append(data)
+            alternative.append(user["name"])
+        
+        # average value 
+        # sudah valid 
+        avg = averageValue(criterias)
+
+        # Menentukan jarak positif 
+        result_pda = pda(criterias, avg)
+
+        # Menentukan jarak negatif 
+        result_nda = nda(criterias, avg)
+
+        # Menentukan jumlah terbobot positif 
+        result_sp = sp(result_pda, "IT")
+
+        # Menentukan jumlah terbobot negatif 
+        result_sn = sn(result_nda, "IT")
+
+        # normaisasi sp 
+        result_nsp = nsp(result_sp)
+
+        # normalisasi sn 
+        result_nsn = nsn(result_sn)
+
+        # perankingan 
+        final = ranking(result_nsp, result_nsn, alternative)
+        
+        print(results)
+        return jsonify(results), 200
+    except Exception as e:
+        return f"An Error Occured: {e}"
+
