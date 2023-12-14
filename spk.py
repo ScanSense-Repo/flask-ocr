@@ -38,8 +38,19 @@ def averageValue(criterias):
     return avg
 
 def pda(criterias, avg):
-    temp_criterias = criterias.copy()
+    temp_criterias = []
     for i, c in enumerate(criterias):
+        temp = {
+            "pengalaman_kerja": 0,
+            "skill_sertifikat": 0,
+            "pengalaman_organisasi": 0,
+            "ipk": 0,
+            "umur": 0,
+            "lokasi_kerja": 0,
+            "name": c["name"]
+        }
+        temp_criterias.append(temp)
+
         temp_criterias[i]["pengalaman_kerja"] = max(0, (float(c["pengalaman_kerja"]) - avg["pengalaman_kerja"]) / avg["pengalaman_kerja"])
         temp_criterias[i]["skill_sertifikat"] = max(0, (float(c["skill_sertifikat"]) - avg["skill_sertifikat"]) / avg["skill_sertifikat"])
         temp_criterias[i]["pengalaman_organisasi"] = max(0, (float(c["pengalaman_organisasi"]) - avg["pengalaman_organisasi"]) / avg["pengalaman_organisasi"])
@@ -50,8 +61,19 @@ def pda(criterias, avg):
     return temp_criterias
 
 def nda(criterias, avg):
-    temp_criterias = criterias.copy()
+    temp_criterias = []
     for i, c in enumerate(criterias):
+        temp = {
+            "pengalaman_kerja": 0,
+            "skill_sertifikat": 0,
+            "pengalaman_organisasi": 0,
+            "ipk": 0,
+            "umur": 0,
+            "lokasi_kerja": 0,
+            "name": c["name"]
+        }
+        temp_criterias.append(temp)
+
         temp_criterias[i]["pengalaman_kerja"] = max(0, (avg["pengalaman_kerja"] - float(c["pengalaman_kerja"])) / avg["pengalaman_kerja"])
         temp_criterias[i]["skill_sertifikat"] = max(0, (avg["skill_sertifikat"] - float(c["skill_sertifikat"])) / avg["skill_sertifikat"])
         temp_criterias[i]["pengalaman_organisasi"] = max(0, (avg["pengalaman_organisasi"] - float(c["pengalaman_organisasi"])) / avg["pengalaman_organisasi"])
@@ -78,18 +100,18 @@ def sp(pda, bidang):
 
 def sn(nda, bidang):
     w = bobot(bidang)
-    result = []
+    result2 = []
     for n in nda:
-        total = 0
-        total += n["pengalaman_kerja"] * w["pengalaman_kerja"]
-        total += n["skill_sertifikat"] * w["skill_sertifikat"]
-        total += n["pengalaman_organisasi"] * w["pengalaman_organisasi"]
-        total += n["ipk"] * w["ipk"]
-        total += n["umur"] * w["umur"]
-        total += n["lokasi_kerja"] * w["lokasi_kerja"]
-        result.append(total)
+        total2 = 0
+        total2 += n["pengalaman_kerja"] * w["pengalaman_kerja"]
+        total2 += n["skill_sertifikat"] * w["skill_sertifikat"]
+        total2 += n["pengalaman_organisasi"] * w["pengalaman_organisasi"]
+        total2 += n["ipk"] * w["ipk"]
+        total2 += n["umur"] * w["umur"]
+        total2 += n["lokasi_kerja"] * w["lokasi_kerja"]
+        result2.append(total2)
     
-    return result
+    return result2
 
 def nsp(sp):
     max_sp = max(sp)
@@ -103,7 +125,7 @@ def nsn(sn):
     max_sn = max(sn)
     result = []
     for s in sn:
-        result.append(s / max_sn)
+        result.append(1 - (s / max_sn))
     
     return result
 

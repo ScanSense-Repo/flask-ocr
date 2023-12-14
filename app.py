@@ -78,28 +78,34 @@ def read():
         avg = averageValue(criterias)
 
         # Menentukan jarak positif 
+        # sudah valid 
         result_pda = pda(criterias, avg)
 
         # Menentukan jarak negatif 
+        # sudah valid 
         result_nda = nda(criterias, avg)
 
         # Menentukan jumlah terbobot positif 
+        # sudah valid 
         result_sp = sp(result_pda, "IT")
 
         # Menentukan jumlah terbobot negatif 
+        # sudah valid 
         result_sn = sn(result_nda, "IT")
 
-        # normaisasi sp 
+        # normaisasi sp
+        # sudah valid 
         result_nsp = nsp(result_sp)
 
         # normalisasi sn 
+        # sudah valid 
         result_nsn = nsn(result_sn)
 
         # perankingan 
         final = ranking(result_nsp, result_nsn, alternative)
         
-        print(results)
-        return jsonify(results), 200
+        # print(results)
+        return jsonify(final), 200
     except Exception as e:
         return f"An Error Occured: {e}"
 
