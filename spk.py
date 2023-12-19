@@ -1,7 +1,7 @@
 import numpy as np
 
 def bobot(bidang):
-    if bidang == "IT":
+    if bidang == "Web Developer":
         return {
             "pengalaman_kerja": 0.3,
             "skill_sertifikat": 0.25,
@@ -9,6 +9,42 @@ def bobot(bidang):
             "ipk": 0.1,
             "umur": 0.05,
             "lokasi_kerja": 0.1
+        }
+    elif bidang == "Marketing":
+        return {
+            "pengalaman_kerja": 0.2,
+            "skill_sertifikat": 0.2,
+            "pengalaman_organisasi": 0.2,
+            "ipk": 0.1,
+            "umur": 0.1,
+            "lokasi_kerja": 0.2
+        }
+    elif bidang == "UI/UX":
+        return {
+            "pengalaman_kerja": 0.15,
+            "skill_sertifikat": 0.25,
+            "pengalaman_organisasi": 0.1,
+            "ipk": 0.1,
+            "umur": 0.1,
+            "lokasi_kerja": 0.3
+        }
+    elif bidang == "Data Analyst":
+        return {
+            "pengalaman_kerja": 0.25,
+            "skill_sertifikat": 0.25,
+            "pengalaman_organisasi": 0.1,
+            "ipk": 0.1,
+            "umur": 0.1,
+            "lokasi_kerja": 0.2
+        }
+    elif bidang == "Mobile Developer":
+        return {
+            "pengalaman_kerja": 0.2,
+            "skill_sertifikat": 0.25,
+            "pengalaman_organisasi": 0.1,
+            "ipk": 0.1,
+            "umur": 0.1,
+            "lokasi_kerja": 0.25
         }
 
 def averageValue(criterias):
@@ -130,12 +166,16 @@ def nsn(sn):
     return result
 
 def ranking(nsp, nsn, alternative):
-    rank = {}
+    # rank = {}
+    rank = []
     for i, np in enumerate(nsp):
         data = 0.5 * (nsp[i] + nsn[i])
-        rank[alternative[i]] = data
+        rank.append({
+            "name": alternative[i],
+            "value": data
+        })
+        # rank[alternative[i]] = data
 
-    sorted_data = dict(sorted(rank.items(), key=lambda item: item[1], reverse=True))
+    # sorted_data = dict(sorted(rank.items(), key=lambda item: item[1], reverse=True))
 
-
-    return sorted_data
+    return rank

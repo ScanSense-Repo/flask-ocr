@@ -87,11 +87,11 @@ def read():
 
         # Menentukan jumlah terbobot positif 
         # sudah valid 
-        result_sp = sp(result_pda, "IT")
+        result_sp = sp(result_pda, bidang)
 
         # Menentukan jumlah terbobot negatif 
         # sudah valid 
-        result_sn = sn(result_nda, "IT")
+        result_sn = sn(result_nda, bidang)
 
         # normaisasi sp
         # sudah valid 
