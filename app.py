@@ -40,11 +40,15 @@ def upload():
 def upload_ktp():
     if request.method == 'POST':
         response = {
-            'nik': '3507322922020012',
+            'nik': '3507322912020002',
             'nama' : 'Wiradarma Nurmagika Bagaskara',
             'ttl' : 'Malang, 29 Desember 2002',
             'jenis_kelamin' : 'Laki-laki',
             'alamat' : 'Jl. Kawi No. 1, Malang',
+            'rt' : '001',
+            'rw' : '001',
+            'kel_desa' : 'Klojen',
+            'kecamatan' : 'Klojen',
             'agama' : 'Islam',
             'status_perkawinan' : 'Belum Kawin',
             'pekerjaan' : 'Pelajar/Mahasiswa',
