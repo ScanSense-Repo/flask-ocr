@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import bisect
 from keras.models import load_model
 
-loaded_model = load_model("/cnn_ocr_tmnist_3.h5")
+loaded_model = load_model("./cnn_ocr_tmnist_3.h5")
 
 characters = [
     "!",
@@ -364,9 +364,7 @@ def apply_morphology(image, operation, kernel=(150, 1)):
     return result
 
 
-def recognize_ktp(img_path):
-    image = cv2.imread(img_path)
-
+def recognize_ktp(image):
     img_fixed = resize_image(image, 8000, 5500)
     foto = crop_image(img_fixed, 5700, 1000, 7700, 3700)
     img_fixed = block_white_color(img_fixed, (5700, 1000), block_size=(2000, 2700))
