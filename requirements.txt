@@ -7,3 +7,4 @@ imutils
 joblib
 python-dotenv
 firebase_admin
+matplotlib
